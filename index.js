@@ -1,15 +1,17 @@
-const express = require("express")
-const app = express()
+const http=require('http')
+const fs=require('fs')
+const express=require('express')
+const app=express()
 const port = 4000
-const fs = require('fs')  
 
-fs.mkdir("C:/Users/Admin/desktop/FileSystemTask", () => 
+fs.mkdir("./FileSystemTask", () => 
     {
         console.log('please reload the browser to create file in this folder !!')
     });
 
-app.get('/',(req,res)=>{
-    const now = new Date();
+
+    const server=http.createServer((req, res)=>{
+        const now = new Date();
     //getting proper date
     const currentdate = JSON.stringify(new Date());
     console.log(currentdate)
@@ -30,12 +32,13 @@ app.get('/',(req,res)=>{
     str = str1.join("_")
     // console.log(str)
     
-    fs.writeFileSync(`C:/Users/Admin/desktop/FileSystemTask/${str}.txt`,`current Date & Time : ${now}`,'utf-8')
-    let data = fs.readFileSync(`C:/Users/Admin/desktop/FileSystemTask/${str}.txt`,'utf-8')
-    res.send(data) 
-})
+    fs.writeFileSync(`./FileSystemTask/${str}.txt`,`current Date & Time : ${now}`,'utf-8')
+    let data = fs.readFileSync(`./FileSystemTask/${str}.txt`,'utf-8')
+    res.writeHead(200, {'content-type':'text/html'})
+    res.end(data) 
+    })
 
 
-app.listen(port,()=>{
+server.listen(port,()=>{
     console.log("App is listening to "+port)
 })
